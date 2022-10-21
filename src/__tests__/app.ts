@@ -313,7 +313,7 @@ describe('game', () => {
         });
     })
 
-    //maxiumum number of consequent symbols possible : won 
+    //maxiumum number of consecutive symbols possible for victory : won 
     test('won 4', function() {
         const result = status({
             next_player: 1,
@@ -340,7 +340,7 @@ describe('game', () => {
     }) 
 
 
-//too many equal consequent symbols, player should have won before and the game should have ended previously : invalid
+//number of consecutive symbols exceeds the maxiumum possible, player should have won before and the game should have ended previously : invalid
     test('invalid 5', function() {
         const result = status({
             next_player: 1,
@@ -367,7 +367,7 @@ describe('game', () => {
     }) 
 
 
-    //possible configuration of victory : won
+    //possible configuration of victory with a double winning sequence : won
     test('won 5', function() {
         const result = status({
             next_player: 1,
@@ -393,7 +393,7 @@ describe('game', () => {
     })
 
 
-    //victory with three compatible winning sequences simultaniously : won 
+    //valid victory configuration with three winning sequences : won 
     test('won 6', function() {
         const result = status({
             next_player: 1,
@@ -419,7 +419,7 @@ describe('game', () => {
     })
 
 
-    //both players have won this is an imposbbile configuration : invalid
+    //both players have won, impossible configuration : invalid
     test('invalid 6', function() {
         const result = status({
             next_player: 0,
@@ -444,7 +444,7 @@ describe('game', () => {
         });
     })
 
-    //impossible configuration of victory the player 0 should have won before : invalid 
+    //impossible configuration of victory, player 0 should have won previously : invalid 
     test('invalid 7', function() {
         const result = status({
             next_player: 0,
@@ -494,7 +494,7 @@ describe('game', () => {
     })
 
 
-    //invlid beacuse the game board doesn't have valid measures : invalid
+    //test with game board with invalid measurements : invalid
     it('invalid 8', function() {
         const result = status({
             next_player: 0,
@@ -514,7 +514,7 @@ describe('game', () => {
         });
     })
 
-    //impossible configuration of victory the player 0 : invalid 
+    //impossible configuration of victory for player 0, second sequence is too long : invalid 
     test('invalid 9', function() {
         const result = status({
             next_player: 1,
@@ -541,7 +541,7 @@ describe('game', () => {
         });
     })
 
-    //possible configuration of victory for player '0' and the two sequences that intersect are longwer than the winning sequence: won
+    //possible configuration of victory for player '0',in this case the two sequences that intersect are longer than the winning sequence: won
     test('won 7', function() {
         const result = status({
             next_player: 1,
@@ -569,7 +569,7 @@ describe('game', () => {
     })
 
 
-    //it is an invalid configuration, the only possible position of intersection for multiole winning positions is [0,2] : invalid
+    //it is an invalid configuration, the only possible cell of intersection for a multiple victory is [0,2] : invalid
     test('invalid 10', function() {
         const result = status({
             next_player: 1,
@@ -583,6 +583,55 @@ describe('game', () => {
                     [-1,0,1,-1,1],
                     [1,0,-1,1,-1],
                     [1,-1,-1,1,-1]
+                ],
+            },
+            players_number: 2,
+            winning_sequence_length: 3,
+        });
+        expect(result).toEqual({
+            status: 'invalid',
+            winningPlayer: null,
+        });
+    })
+
+
+    //presence of more players in the status board that indicated in the 'players_numer' : invalid
+    test('invalid 11', function() {
+        const result = status({
+            next_player: 1,
+            board: {
+                size: {
+                    width: 3,
+                    height: 3,
+                },
+                status:[
+                    [0,-1,0],
+                    [-1,2,-1],
+                    [1,-1,-1]
+                ],
+            },
+            players_number: 2,
+            winning_sequence_length: 3,
+        });
+        expect(result).toEqual({
+            status: 'invalid',
+            winningPlayer: null,
+        });
+    })
+
+    //this configuration is invalid because the next player should be '1' : invalid
+    test('invalid 12', function() {
+        const result = status({
+            next_player: 0,
+            board: {
+                size: {
+                    width: 3,
+                    height: 3,
+                },
+                status:[
+                    [0,-1,0],
+                    [-1,-1,1],
+                    [-1,-1,-1]
                 ],
             },
             players_number: 2,

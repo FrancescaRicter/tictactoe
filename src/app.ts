@@ -15,7 +15,7 @@ enum Direction {
     AD = 'anti_diagonal'
 }
 
-let first,second,third : Direction ;
+let first, second, third : Direction;
 
 class GameParameters implements GameStatus {
     status;
@@ -67,6 +67,7 @@ function reset(){
     triple_sequence=false;
 }
 
+//function returns true if the winning center is compatible with the given winning sequence
 function check_validity(game: Game, or : Direction, array:[number,number][],a : number, b:number) : boolean {
     var val : boolean = true;
    
@@ -79,12 +80,11 @@ function check_validity(game: Game, or : Direction, array:[number,number][],a : 
         }
     }
     if(or==Direction.V )  {
-        console.log("len"+(array[array.length-1][0] +""+ a));
+       
         if(array[array.length-1][0]-a>=game.winning_sequence_length){
-
             val = false;
         }
-        console.log("len"+ a + "" + array[0][0]);
+ 
         if(a-array[0][0]>=game.winning_sequence_length){
             val=false;
         }
@@ -101,18 +101,16 @@ function check_validity(game: Game, or : Direction, array:[number,number][],a : 
     return val;
 }
 
-//second array sub_sequence of first array 
+//function that returns true if the second array subpart of the first array 
 function sub_sequence(first_array:[number,number][],second_array:[number,number][]): boolean{ 
     var valid : boolean;
     var k,a :number;
 
-    console.log("te position is" +i+j);
     valid = true;
     for(k=0;k<second_array.length && valid ;k++){
         valid=false;
         for(a=0;a<first_array.length;a++){
             if(second_array[k][0]==first_array[a][0] && second_array[k][1]==first_array[a][1]){
-                console.log("true");
                 valid=true;
                 break;
             }
@@ -122,6 +120,7 @@ function sub_sequence(first_array:[number,number][],second_array:[number,number]
     return valid;
 }
 
+//function that saves a given sequence of cells in the given array
 function save_sequence(row:number,column:number,length:number,orientation:Direction,array:[number,number][]){
     var a,b,k:number;
     a=i;
@@ -142,6 +141,7 @@ function save_sequence(row:number,column:number,length:number,orientation:Direct
     }
 }
 
+//function that discovers a winning sequence in the given direction
 function discover_sequence (game:Game, orientation : Direction) : void {
     var a,b,len,k : number;
     var valid,temp : boolean;
@@ -180,7 +180,6 @@ function discover_sequence (game:Game, orientation : Direction) : void {
                         break; 
                 }
 
-
                 //winning sequence found
                 if(len>=game.winning_sequence_length && len<(game.winning_sequence_length)*2){
 
@@ -195,14 +194,11 @@ function discover_sequence (game:Game, orientation : Direction) : void {
                     //second winning sequence in the game found
                     else if(output.getWinner()==game.board.status[i][j] && winning_center[0]==-1){
 
-                        console.log("second sequence");
-                        console.log("len"+len);
                         save_sequence(i,j,len,orientation,second_winning_pos);
 
                         //verify that the second winning sequence is not a subpart of the first sequence
                         valid = sub_sequence(first_winning_positions,second_winning_pos);
-                        console.log(valid);
-    
+        
                         if(valid){
                             second_winning_pos=null;
                             second_winning_pos=[[-1,-1]];
@@ -212,38 +208,24 @@ function discover_sequence (game:Game, orientation : Direction) : void {
                         //verify if the two sequnces intersect and are compatible
                         valid=false;
                         for(k=0;k<second_winning_pos.length && !valid;k++){
-                            console.log("second");
-                            console.log(second_winning_pos[k][0]);
-                            console.log(second_winning_pos[k][1]);
                             for(a=0;a<first_winning_positions.length;a++){
-                                console.log("first");
-                                console.log(first_winning_positions[a][0]);
-                                console.log(first_winning_positions[a][1]);
-
                                 if(second_winning_pos[k][0]==first_winning_positions[a][0] && second_winning_pos[k][1]==first_winning_positions[a][1]){
-                                    {
                                     valid=check_validity(game,first,first_winning_positions,first_winning_positions[a][0],first_winning_positions[a][1]);
-                                    console.log(valid);
                                     if(valid){
                                         valid=check_validity(game,orientation,second_winning_pos,second_winning_pos[k][0],second_winning_pos[k][1]);
-                                        console.log(valid);
                                        }
                                     if(valid){
-                                        console.log("set");
                                         winning_center[0]=second_winning_pos[k][0];
                                         winning_center[1]=second_winning_pos[k][1];
                                         break;
                                     }   
                                 }
-                                }
                             }
                         }
-                        
-
-                        //the two winning sequences are in not compatible positions
+                    
+                        //the two winning sequences are in non compatible positions
                         if(winning_center[0]==-1 || !valid){
                             output.setStatus('invalid');
-                            console.log("the two winning sequences are in not compatible positions");
                             return;
                         }
                     }
@@ -259,14 +241,11 @@ function discover_sequence (game:Game, orientation : Direction) : void {
                                 return ;}
                         }
                         else{
-                            console.log("third");
-
                             save_sequence(i,j,len,orientation,third_winning_pos);
                             valid=sub_sequence(first_winning_positions,third_winning_pos);
-                            console.log(valid);
                             if(!valid){
                                 valid=sub_sequence(second_winning_pos,third_winning_pos);
-                                console.log(valid);
+                  
                             }
 
                             if(valid){
@@ -283,11 +262,8 @@ function discover_sequence (game:Game, orientation : Direction) : void {
                                     valid=true;    
                                 }
                             }
-                        
-                            console.log(valid);
-                            console.log(output.getStatus());
+               
                             if(!valid){
-                                console.log("before triple  ");
                                 output.status='invalid';
                                 return ;
                             }
@@ -302,7 +278,6 @@ function discover_sequence (game:Game, orientation : Direction) : void {
 
                 //the winning sequence is too long the player should have won before
                 else if(len>=game.winning_sequence_length*2){
-        
                     output.setStatus('invalid'); 
                     return;
                 }
@@ -334,15 +309,18 @@ export function status (game: Game): GameStatus {
         }
     }
 
+    if(player_moves.length>game.players_number)
+        output.setStatus('invalid');
+
     for(i=0;i<game.players_number;i++){
         total_moves = total_moves + player_moves[i];
     }
 
-    //verification on the validity of number of moves performed by the players
+    //check on the validity of number of moves performed by the players
     bool=true;
     for(i=0;i<game.players_number-1;i++){
         if(player_moves[i]!=player_moves[i+1]){
-            bool=false;   //different number of moves between players (check validity)
+            bool=false;   //different number of moves between players (check if valid)
             break;
         }
     }
