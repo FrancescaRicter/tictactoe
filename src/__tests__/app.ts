@@ -644,4 +644,53 @@ describe('game', () => {
     })
 
 
+    //the dimension are not valid,they should follow the rule - width x height : invalid
+    test('invalid 12', function() {
+        const result = status({
+            next_player: 1,
+            board: {
+                size: {
+                    width: 3,
+                    height: 3,
+                },
+                status:[
+                    [0,-1,0],
+                    [-1,-1,1],
+                    [-1,-1]
+                ],
+            },
+            players_number: 2,
+            winning_sequence_length: 3,
+        });
+        expect(result).toEqual({
+            status: 'invalid',
+            winningPlayer: null,
+        });
+    })
+
+     //invalid winning_sequence
+     test('invalid 12', function() {
+        const result = status({
+            next_player: 1,
+            board: {
+                size: {
+                    width: 3,
+                    height: 3,
+                },
+                status:[
+                    [0,-1,0],
+                    [-1,-1,1],
+                    [-1,-1,-1]
+                ],
+            },
+            players_number: 2,
+            winning_sequence_length: 0,
+        });
+        expect(result).toEqual({
+            status: 'invalid',
+            winningPlayer: null,
+        });
+    })
+
+    
 })

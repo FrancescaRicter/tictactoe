@@ -290,7 +290,7 @@ function discover_sequence (game:Game, orientation : Direction) : void {
 export function status (game: Game): GameStatus {
     reset();
 
-    if(game.board.size.height<1 || game.board.size.width<1)
+    if(game.board.size.height<1 || game.board.size.width<1 || game.winning_sequence_length>0)
        output.setStatus('invalid');
 
     //array that holds the number of moves performed by each player
@@ -320,7 +320,7 @@ export function status (game: Game): GameStatus {
     bool=true;
     for(i=0;i<game.players_number-1;i++){
         if(player_moves[i]!=player_moves[i+1]){
-            bool=false;   //different number of moves between players (check if valid)
+            bool=false;   //different number of moves between players (check if )
             break;
         }
     }
