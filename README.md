@@ -3,7 +3,7 @@ Contribution by Francesca Ricter
 In my contribution to the TicTacToe exercise I have taken a few consiredations into account:
 - the winning sequence must be '>0' 
 - the status matrix must follow the rule : width x height 
-- the parameter 'next_player' must always indicate the correct next player (also in a 'tie' configuration of the board), if not so the output for that given input will be 'invalid'
+- the parameter 'next_player' must always indicate the correct next player (also in a 'tie' configuration of the board), if not the output for that given input will be 'invalid'
 - two or more players cannot create a winning sequence on the game-board, therefore a similar configuration is considered 'invalid'
 - the maximum length of a possible single winning sequence must be : winning_sequence x 2 (if the sequence length exceedes this number the game must have ended previously, I consider this an 'invalid' configuration)
 - the winner can create up to three winning sequences on the same board (these must be created by the last move taken by the player),    these sequences must follow some rules, in addition to the ones written above, in order to create a valid status for the game:
