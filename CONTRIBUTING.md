@@ -12,8 +12,7 @@ In my contribution to the TicTacToe exercise I have taken a few consiredations i
 - each turn follows the order from 0 to the players_number-1  
 - no numbers equal or above 'players_number' can be present on the status matrix        
 
-I have added a few tests that show some examples for these rules. 
-
+I have added a few tests that show some examples for the rules above. 
 
 _________________________________________________________________________________________________________________________________________
 
